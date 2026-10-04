@@ -79,7 +79,7 @@ TEMPLATE = {
         "bytes": 20081404,
         "sha256": "aee9802f46bae436bd91751bb33ddeb379ef1596b5c19df193219d545d244b60",
     },
-    "disk_gib": {"weights": 0.1, "environment": 9},
+    "disk_gib": {"weights": 0.1, "environment": 7},
     "runtime_modules": ["torch", "transformers", "numpy", "PIL"],
     "title": "Swin2SR x4 — DIMER Guided Notebook: 4x image super-resolution (task inference, standalone)",
     "badges": BADGES,
@@ -113,7 +113,7 @@ TEMPLATE = {
         "looks to a person. The repository exposes none of these."
     ),
     "prerequisites": [
-        "- **Runtime:** a fresh supported **Linux x86_64** runtime (Google Colab, Kaggle, or a Linux Jupyter kernel). A CUDA GPU such as a T4 is used automatically when present; without one every stage runs on the CPU in float32. The kernel's own Python version does not matter: the notebook installs nothing into it and runs every stage with CPython 3.12.12 in an isolated environment built from {n_locked} hash-locked packages (torch 2.14.0, whose Linux wheel is the CUDA 13.0 build and also runs on a CPU). About 9 GB of free disk is needed for that environment and 0.1 GB for the weights and photographs.",
+        "- **Runtime:** a fresh supported **Linux x86_64** runtime (Google Colab, Kaggle, or a Linux Jupyter kernel). A CUDA GPU such as a T4 is used automatically when present; without one every stage runs on the CPU in float32. The kernel's own Python version does not matter: the notebook installs nothing into it and runs every stage with CPython 3.12.12 in an isolated environment built from {n_locked} hash-locked packages (torch 2.14.0, whose Linux wheel is the CUDA 13.0 build and also runs on a CPU). About 7 GB of free disk is needed for that environment (it occupied 5.5 GB in a local CPU run) and 0.1 GB for the weights and photographs.",
         "- **Time on a CPU:** measured for this architecture on a 4-vCPU host in float32, one forward pass took 3.2 s for an 80 px input, 4.6 s for 128 px and 28.7 s for 256 px (the largest accepted input). The 24 sample inputs are 80 px, so Section 5 is estimated (not measured) at one to two minutes on such a host, and longer on a 2-vCPU hosted runtime. These are measurements of the model's compute with random weights on that host, not of a hosted run of this notebook.",
         "- **Knowledge:** you can run notebook cells and read short Python. No prior experience with super-resolution is assumed; the glossary below defines PSNR, SSIM, the Y channel and the other terms.",
         "- **Weights:** only `model.safetensors` is loaded; the upstream repository's `pytorch_model.bin` (a pickle file) is never downloaded or unpickled, and no Hub-hosted code is executed — the model classes come from `transformers` on PyPI with `trust_remote_code=False`. The weights are released under Apache-2.0.",
@@ -549,7 +549,7 @@ TEMPLATE = {
                 "Use Google Colab, Kaggle, or a Linux x86_64 machine: the locked environment is built for manylinux x86_64 wheels. |\n"
                 "| Section 1 prints `none: the stages will run on the CPU` | no GPU is attached | Nothing to fix: the notebook works on the "
                 "CPU. For speed, choose *Runtime → Change runtime type → T4 GPU* and run all again from the top. |\n"
-                "| Section 1 stops with `Not enough free disk` | the isolated environment needs about 9 GB | Start a fresh runtime with more "
+                "| Section 1 stops with `Not enough free disk` | the isolated environment needs about 7 GB | Start a fresh runtime with more "
                 "free disk. |\n"
                 "| `Carried file integrity failure` in Section 2 | a carried file was edited in the notebook | Do not edit the "
                 "infrastructure cells; open a fresh copy of the notebook from the repository. |\n"
