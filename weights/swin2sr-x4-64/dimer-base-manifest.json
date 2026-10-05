@@ -1,0 +1,38 @@
+{
+  "format": "dimer_hf_snapshot",
+  "formatVersion": 1,
+  "modelKey": "swin2sr-x4-64",
+  "modelId": "caidas/swin2SR-classical-sr-x4-64",
+  "revision": "c69ef3e2d2ac5777ff4a9f2f5afcd86d20604b7e",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 642,
+      "sha256": "670af06ed69a933293554ee8d19a993912a59044a34d886477f5273dcf926b22"
+    },
+    {
+      "path": "config.json",
+      "bytes": 772,
+      "sha256": "827237812fb18548d2e66dd7c67bb62a9b0c1a88cd79968639b18089f0d6ac2f"
+    },
+    {
+      "path": "model.safetensors",
+      "bytes": 49051724,
+      "sha256": "e4e0680f28b663d62a64a3e1884336d0bac5b215da7903c618f41f58f4cc0ff4"
+    },
+    {
+      "path": "preprocessor_config.json",
+      "bytes": 152,
+      "sha256": "cbc36266fcc93d5bc1e9ca69bcc648ae9d268918ad14cd3507216740f129cc4d"
+    }
+  ],
+  "totalBytes": 49053290,
+  "referenceFiles": [
+    {
+      "path": "pytorch_model.bin",
+      "bytes": 49198181,
+      "sha256": "d173b005e999ce79e07b71b7f208922d40176b4039785f7d7bb0b641d9a85dee",
+      "note": "pickle checkpoint of the same weights; never staged, never loaded; listed for provenance only"
+    }
+  ]
+}
