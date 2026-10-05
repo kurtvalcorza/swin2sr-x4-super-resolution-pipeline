@@ -7,6 +7,7 @@ from __future__ import annotations
 import hashlib
 import importlib.util
 import json
+import re
 import shutil
 from pathlib import Path
 from types import SimpleNamespace
@@ -38,7 +39,23 @@ def _copy_repo(tmp_path: Path) -> Path:
             shutil.copy(ROOT / relative, tmp_path / relative)
     shutil.copytree(ROOT / "src", tmp_path / "src")
     shutil.copytree(ROOT / "weights", tmp_path / "weights", ignore=shutil.ignore_patterns("*.safetensors", "inat-birds"))
+    _unpin(tmp_path)
     return tmp_path
+
+
+def _unpin(root: Path) -> None:
+    """Return the copy to the pre-pin state the tool runs on: no revision and no weight or reference digest."""
+    path = root / MANIFEST
+    manifest = json.loads(path.read_text())
+    manifest["revision"] = "unpinned"
+    for entry in manifest["files"]:
+        if entry["path"].endswith(".safetensors"):
+            entry["sha256"] = None
+    for entry in manifest.get("referenceFiles", []):
+        entry["sha256"] = None
+    path.write_text(json.dumps(manifest, indent=2) + "\n")
+    module = root / MODULE
+    module.write_text(re.sub(r'^MODEL_REVISION = "[^"]*"$', 'MODEL_REVISION = "unpinned"', module.read_text(), count=1, flags=re.M))
 
 
 def _fake_hub(files: dict[str, bytes], lfs_override: dict[str, str] | None = None):

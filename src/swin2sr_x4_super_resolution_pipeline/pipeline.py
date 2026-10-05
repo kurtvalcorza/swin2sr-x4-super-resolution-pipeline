@@ -25,7 +25,7 @@ import numpy as np
 from PIL import Image
 
 MODEL_ID = "caidas/swin2SR-classical-sr-x4-64"
-MODEL_REVISION = "unpinned"
+MODEL_REVISION = "c69ef3e2d2ac5777ff4a9f2f5afcd86d20604b7e"
 MODEL_LICENSE = "apache-2.0"
 MODEL_KEY = "swin2sr-x4-64"
 DEFAULT_WEIGHTS_DIR = Path(__file__).resolve().parents[2] / "weights" / MODEL_KEY

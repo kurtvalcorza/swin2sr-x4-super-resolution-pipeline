@@ -2,12 +2,12 @@
 
 DIMER task-inference wrapper for **Swin2SR classical-sr-x4-64** (`caidas/swin2SR-classical-sr-x4-64`), loaded only from a digest-verified local SafeTensors snapshot. The pipeline upscales one RGB image by exactly 4× and returns a uint8 array with a record of the padding it applied; the evaluation helpers score it against bicubic and nearest-neighbour interpolation with Y-channel PSNR and SSIM. It is the classical (bicubic-degradation) variant, not a compression-artefact or real-world restorer, and nothing is fine-tuned.
 
-> **The snapshot is not yet pinned.** The Hugging Face Hub was not reachable when this repository was built, so `MODEL_REVISION` is `"unpinned"` and the manifest has no SHA-256 for `model.safetensors`. The package refuses to stage, verify or load weights until `python tools/pin_snapshot.py` is run where the Hub is reachable. See `docs/WEIGHTS.md`.
+> **The snapshot is pinned** to commit `c69ef3e2d2ac5777ff4a9f2f5afcd86d20604b7e`. `model.safetensors` (49,051,724 bytes) has SHA-256 `e4e0680f28b663d62a64a3e1884336d0bac5b215da7903c618f41f58f4cc0ff4`, matching the Hub's LFS record; every file is checked by size and SHA-256 before any load. It was pinned on 2026-10-05 by running `python tools/pin_snapshot.py --dry-run` in a Google Colab runtime (the Hub is unreachable from the build environment); the manifest and `MODEL_REVISION` were written from its output exactly as the tool writes them. See `docs/WEIGHTS.md`.
 
 ## Upstream alignment
 
 - Model: `caidas/swin2SR-classical-sr-x4-64` (Conde et al., arXiv:2209.11345; code https://github.com/mv-lab/swin2sr)
-- Revision: not yet pinned (`tools/pin_snapshot.py` records it)
+- Revision: `c69ef3e2d2ac5777ff4a9f2f5afcd86d20604b7e`
 - Upstream weight licence: Apache-2.0
 - Upstream task: single-image super-resolution, ×4, classical (bicubic) degradation
 - Weights used: `model.safetensors` only; the upstream `pytorch_model.bin` (pickle) is never downloaded or loaded
@@ -46,7 +46,7 @@ tools/
   pin_snapshot.py           # records the immutable revision and digests
   validate_release_assets.py
 weights/swin2sr-x4-64/
-  dimer-base-manifest.json  # modelId, revision (unpinned), per-file bytes + SHA-256 (weights digest pending)
+  dimer-base-manifest.json  # modelId, pinned revision, per-file bytes + SHA-256
   config.json, preprocessor_config.json, README.md   # upstream text files, byte-identical to the Hub's main
   model.safetensors         # git-ignored, 49,051,724 bytes, downloaded after pinning
 tutorials/
@@ -73,7 +73,7 @@ The default path stages and verifies the snapshot, fetches 27 digest-pinned CC0 
 
 ## Release status
 
-**Candidate** — initial development. There is no hosted execution evidence, and the snapshot is not yet pinned, so the notebook's default path currently stops at Section 3 by design. A CPU pre-flight of the whole notebook against a tiny random-initialised snapshot is recorded in `docs/release-verification.md`; it is not release evidence. See `STATUS.md` for the remaining steps.
+**Candidate** — initial development. The snapshot is pinned, but there is no hosted execution evidence yet. A CPU pre-flight of the whole notebook against a tiny random-initialised snapshot is recorded in `docs/release-verification.md`; it is not release evidence. See `STATUS.md` for the remaining steps.
 
 ## Documentation
 

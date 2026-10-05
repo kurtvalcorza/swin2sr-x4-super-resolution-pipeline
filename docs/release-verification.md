@@ -9,7 +9,7 @@ The tutorial notebook `tutorials/swin2sr_x4_super_resolution_colab.ipynb` is pro
 | Lint, unit tests, tiny-model CPU tests of the loader, padding, metrics, every stage in order and both BYOD modes | CI (`.github/workflows/ci.yml`) | yes |
 | Notebook parity with the repository (carried files, hashes, lock, generator output), cleared outputs, no kernel `pip install` | CI (`tests/test_notebook_parity.py`, `python tools/build_notebook.py --check`) | yes |
 | Static release-asset validation (card, registry, status, guided layer, infrastructure titles, forbidden patterns) | CI (`python tools/validate_release_assets.py`) | yes |
-| Real weights: staging, digest verification, reconstruction quality | manual — CI cannot reach the Hugging Face Hub, and the snapshot is not yet pinned | no |
+| Real weights: staging, digest verification, reconstruction quality | manual — CI cannot reach the Hugging Face Hub (snapshot pinned 2026-10-05) | no |
 | Clean hosted Run all, one pass, no restart; BYOD positive and negative (REL12) | manual — Colab T4 | no |
 
 ## Procedure for the hosted run
@@ -64,4 +64,4 @@ Execution evidence:
 | 3 | `RUN_ACTIVITY=True`, `ACTIVITY_KERNEL='bicubic'`, `ACTIVITY_JPEG_QUALITY=30`, `USE_BYOD=True`, `BYOD_MODE='lr'`, `BYOD_PATH=<zip of 2 RGBA PNGs in a sub-folder>` | ok, 179.0 s; RGB conversion and alpha removal reported; outputs labelled `not-measurable` |
 | 4 | `USE_BYOD=True`, `BYOD_MODE='lr'`, `BYOD_PATH=<300 × 200 PNG>` | the BYOD cell stopped as designed with `RuntimeError: Stage 'byod' failed (exit 2): ValueError: … longer side 300 px > MAX_INPUT_SIDE 256 …`; every earlier cell ok |
 
-- **Caveats:** wall times include building the isolated environment on a shared host and vary with its load. The tiny model's outputs are meaningless, so no score from these runs is model performance. The real weights were not used (the snapshot is not yet pinned and the Hub is unreachable from that host). The upload dialog, a GPU and a hosted runtime were not exercised. The unmodified notebook's Section 3 refusal for the unpinned snapshot is covered by `tests/test_tutorial_stages.py::test_unpinned_weights_stage_explains_itself`.
+- **Caveats:** wall times include building the isolated environment on a shared host and vary with its load. The tiny model's outputs are meaningless, so no score from these runs is model performance. The real weights were not used (the snapshot was not pinned at the time, and the Hub is unreachable from that host). The upload dialog, a GPU and a hosted runtime were not exercised. The unmodified notebook's Section 3 refusal for the unpinned snapshot is covered by `tests/test_tutorial_stages.py::test_unpinned_weights_stage_explains_itself`.

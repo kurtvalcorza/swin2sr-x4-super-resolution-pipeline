@@ -19,7 +19,7 @@ date_published_source: "Month of the upstream release of the Swin2SR classical-S
 > ⚠️ **Provided for research, training, and evaluation purposes only.** Model weights are redistributed unmodified under their upstream license, which controls your use, including any commercial use or redistribution; the accompanying code and notebooks are released under this repository's license. All of it is supplied **"as is"**, without warranty of any kind, and has not been validated for production, clinical, or safety-critical use. Running the notebooks downloads third-party weights and datasets governed by their own licenses and consumes compute on your own Colab/Kaggle account. To the maximum extent permitted by law, the maintainers of this repository and the DIMER platform accept no liability for any damages arising from their use. Hosting implies no affiliation with or endorsement by the original authors.
 
 > [!IMPORTANT]
-> **The snapshot is not yet pinned.** `MODEL_REVISION` is `"unpinned"` and the manifest records no SHA-256 for `model.safetensors`, so the package refuses to stage, verify or load the weights until `python tools/pin_snapshot.py` has recorded an immutable commit and every file's digest. No result in this card was produced with the real weights.
+> **The snapshot is pinned** to commit `c69ef3e`, with every file's size and SHA-256 recorded and checked before any load. No result in this card was produced with the real weights yet.
 
 ---
 
@@ -122,7 +122,7 @@ These measures were chosen because Y-channel PSNR and SSIM with a scale-sized bo
 
 On an input with no reference (the tutorial's new inputs, BYOD `lr` mode) nothing is scored and the result is labelled `not-measurable`; a caller who wants a score must supply the high-resolution original.
 
-No value of these measures has been produced with the real weights, because the snapshot is not yet pinned. The upstream paper's Set5, Set14 and Urban100 results are not reproduced or claimed here.
+No value of these measures has been produced with the real weights yet: the snapshot is pinned, but no hosted run has been recorded. The upstream paper's Set5, Set14 and Urban100 results are not reproduced or claimed here.
 
 ###### Decision thresholds
 
@@ -193,9 +193,9 @@ The following uses are prohibited even where the model would work:
 ## Immutable provenance
 
 - Model: `caidas/swin2SR-classical-sr-x4-64`.
-- Revision: not yet pinned (`MODEL_REVISION = "unpinned"`). `python tools/pin_snapshot.py` resolves an immutable commit and records it with every digest.
+- Revision: `c69ef3e2d2ac5777ff4a9f2f5afcd86d20604b7e`, resolved from `main` and recorded with every digest by `tools/pin_snapshot.py` on 2026-10-05.
 - Snapshot manifest: `weights/swin2sr-x4-64/dimer-base-manifest.json`, 4 files, `totalBytes` 49,053,290.
-- `model.safetensors`: 49,051,724 bytes as reported by the Hub; SHA-256 not yet recorded.
+- `model.safetensors`: 49,051,724 bytes, SHA-256 `e4e0680f28b663d62a64a3e1884336d0bac5b215da7903c618f41f58f4cc0ff4` (matches the Hub's LFS record).
 - `config.json`: 772 bytes, SHA-256 `827237812fb18548d2e66dd7c67bb62a9b0c1a88cd79968639b18089f0d6ac2f`.
 - `preprocessor_config.json`: 152 bytes, SHA-256 `cbc36266fcc93d5bc1e9ca69bcc648ae9d268918ad14cd3507216740f129cc4d`.
 - `README.md`: 642 bytes, SHA-256 `670af06ed69a933293554ee8d19a993912a59044a34d886477f5273dcf926b22`.
@@ -222,7 +222,7 @@ Static checks — unit tests, the notebook parity check and `tools/validate_rele
 - **Runtime:** Linux x86_64, 4 vCPU, no GPU; kernel CPython 3.12.12; isolated environment built by the notebook with CPython 3.12.12, `torch 2.14.0+cu130`, `transformers 4.57.6`.
 - **Procedure:** fresh kernel, all cells in order through `nbclient`. One default run, and three runs with form fields set in executed copies: activity with `box` and with `bicubic` + JPEG 30; BYOD `hr` on a folder of three odd-sized images; BYOD `lr` on a zip of two RGBA images; BYOD `lr` on a 300 × 200 image.
 - **Observed result:** the default run completed every cell in 100.9 s, including building the isolated environment from the lock. All 27 photographs were fetched from the iNaturalist bucket and verified. Twenty-four 320/80 px pairs passed validation and all five refusal probes were rejected. Evaluation, reference-free inference and the provenance record completed and every listed output was written. The activity and both positive BYOD runs completed; BYOD `hr` reported the pixels cropped to reach a multiple of 4. The 300 × 200 `lr` input stopped the BYOD cell with the stage's `MAX_INPUT_SIDE 256` message.
-- **Caveats:** the tiny model's outputs are meaningless, so its scores are not reported as model performance. The real weights were not used because the snapshot is not yet pinned. No GPU and no hosted Colab or Kaggle runtime was used. The upload dialog was not exercised.
+- **Caveats:** the tiny model's outputs are meaningless, so its scores are not reported as model performance. The real weights were not used because the snapshot was not pinned at the time. No GPU and no hosted Colab or Kaggle runtime was used. The upload dialog was not exercised.
 
 - **Date:** 2026-10-04
 - **Subject:** forward-pass timing of the architecture declared in `weights/swin2sr-x4-64/config.json` (a short timing script, not the notebook).
