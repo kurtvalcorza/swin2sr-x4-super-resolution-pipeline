@@ -73,7 +73,7 @@ The default path stages and verifies the snapshot, fetches 27 digest-pinned CC0 
 
 ## Release status
 
-**Candidate** — initial development. The snapshot is pinned, but there is no hosted execution evidence yet. A CPU pre-flight of the whole notebook against a tiny random-initialised snapshot is recorded in `docs/release-verification.md`; it is not release evidence. See `STATUS.md` for the remaining steps.
+**Candidate** — initial development. The snapshot is pinned, and a Google Colab T4 `Run all` with the real weights completed on 2026-10-05 (Y-channel PSNR 30.84 dB against 28.15 dB for bicubic on 24 images). The hosted BYOD journey is still open. A CPU pre-flight of the whole notebook against a tiny random-initialised snapshot is recorded in `docs/release-verification.md`; it is not release evidence. See `STATUS.md` for the remaining steps.
 
 ## Documentation
 

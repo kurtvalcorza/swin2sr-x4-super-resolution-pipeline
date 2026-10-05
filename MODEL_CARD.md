@@ -122,7 +122,15 @@ These measures were chosen because Y-channel PSNR and SSIM with a scale-sized bo
 
 On an input with no reference (the tutorial's new inputs, BYOD `lr` mode) nothing is scored and the result is labelled `not-measurable`; a caller who wants a score must supply the high-resolution original.
 
-No value of these measures has been produced with the real weights yet: the snapshot is pinned, but no hosted run has been recorded. The upstream paper's Set5, Set14 and Urban100 results are not reproduced or claimed here.
+Measured in one Google Colab T4 run of the tutorial with the real weights (24 CC0 bird photographs, 320 px references and 80 px inputs, 4 px border crop; see the verification records):
+
+| Method | `psnr_y` (dB) | `ssim_y` | `psnr_rgb` (dB) |
+|---|---|---|---|
+| nearest | 26.72 | 0.7364 | 25.34 |
+| bicubic | 28.15 | 0.7879 | 26.78 |
+| Swin2SR ×4 | 30.84 | 0.8616 | 29.45 |
+
+The model exceeded bicubic on all 24 images, by 2.69 dB PSNR-Y on average (paired bootstrap 95 % interval 2.09 to 3.35). These are tutorial-sample values from one run, not benchmark results. The upstream paper's Set5, Set14 and Urban100 results are not reproduced or claimed here.
 
 ###### Decision thresholds
 
@@ -216,6 +224,13 @@ The following uses are prohibited even where the model would work:
 ## Runtime and verification records
 
 Static checks — unit tests, the notebook parity check and `tools/validate_release_assets.py` — run in CI and are not execution evidence. The records below are the executions performed so far.
+
+- **Date:** 2026-10-05
+- **Subject:** `tutorials/swin2sr_x4_super_resolution_colab.ipynb`, blob `caa2969` at commit `bec3d3e`, with the pinned snapshot
+- **Runtime:** Google Colab, Tesla T4; kernel CPython 3.13.15; isolated environment CPython 3.12.12, `torch 2.14.0+cu130`, `transformers 4.57.6`
+- **Procedure:** `Run all` with no field edited
+- **Observed result:** all 9 code cells completed with no error or restart; all four snapshot files verified; the values in the Performance Measures table; the four reference-free inputs upscaled and exported. The executed copy is in `docs/execution-evidence/2026-10-05/`
+- **Caveats:** the Colab session had just run the pin dry run, so it was not strictly fresh; the activity and the bring-your-own-data branch were not run; one pass
 
 - **Date:** 2026-10-04
 - **Subject:** `tutorials/swin2sr_x4_super_resolution_colab.ipynb` regenerated into a scratch copy from the sources of commit `72257df` with two test substitutions: `MODEL_REVISION` set to a test value, and the manifest replaced by one describing a tiny random-initialised Swin2SR ×4 snapshot (12-dim embedding, one stage) staged beforehand.

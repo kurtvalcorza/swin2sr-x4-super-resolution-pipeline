@@ -50,6 +50,19 @@ Execution evidence:
 
 ## Recorded executions
 
+### 2026-10-05 — Google Colab T4, default `Run all` with the real weights
+
+- **Date:** 2026-10-05
+- **Subject:** `tutorials/swin2sr_x4_super_resolution_colab.ipynb`, blob `caa2969c6695de39501ede9183b0de61639de1fc` (branch `ccr-24656dfc-ax1ln2` at `bec3d3e`; carried files of that commit, labelled with its parent `a112444`). Every source cell of the executed copy is byte-identical to that blob. The executed copy is `docs/execution-evidence/2026-10-05/swin2sr_x4_super_resolution_colab_caa2969_colab-t4.ipynb`.
+- **Runtime:** Google Colab, Tesla T4 (15,360 MiB), kernel CPython 3.13.15. Stage environment built by the notebook: CPython 3.12.12 managed by `uv`, the 45-package lock, `torch 2.14.0+cu130` with CUDA, `transformers 4.57.6`, `numpy 2.5.3`, `pillow 11.3.0`; built in 86 s.
+- **Procedure:** `Run all` with no field edited (`RUN_ACTIVITY = False`, `USE_BYOD = False`).
+- **Observed result:** all 9 code cells completed in order with no error and no restart.
+  - Section 3: `model.safetensors` fetched at `c69ef3e2d2ac5777ff4a9f2f5afcd86d20604b7e`; all four files verified by size and SHA-256 (2.1 s).
+  - Section 4: 27 photographs fetched and verified (2,547,912 bytes); 24 pairs of 320 px references and 80 px inputs, 4 per species; padding reported per input; all five refusal probes rejected (13.7 s).
+  - Section 5, on CUDA (0.23 s per image): Y-channel PSNR `nearest` 26.72 dB, `bicubic` 28.15 dB, model 30.84 dB; Y-channel SSIM 0.7364, 0.7879, 0.8616; RGB PSNR 25.34, 26.78, 29.45 dB. Model minus bicubic: +2.69 dB PSNR-Y (95 % bootstrap 2.09 to 3.35), +0.0737 SSIM-Y (0.0581 to 0.0932); the model won on 24 of 24 images. Per species, the model's PSNR-Y ranged from 27.88 dB (white-throated sparrow) to 33.47 dB (dark-eyed junco), each above its bicubic value (20.5 s).
+  - Section 6: four reference-free inputs upscaled ×4 (three 96 px photographs to 384 px, the synthetic scene 100 × 76 to 400 × 304) with per-image provenance; every listed output written (6.9 s).
+- **Caveats:** the runtime was not completely fresh. Execution counts start at 2 and the run directory sits inside a clone of this repository, so the notebook ran in the same Colab session that had just run the pin dry run. The notebook writes and verifies its own carried code and builds its own isolated environment, and it downloaded the weights fresh, so the outcome does not depend on that session state; still, it is not a clean-state run in the strict sense of REL2. The optional activity and the BYOD branch were not run (REL12 open). One pass, one runtime; the sample is 24 CC0 photographs of six species, not a benchmark. Transformers printed a harmless deprecation notice about `pad_size`.
+
 ### 2026-10-04 — CPU pre-flight with a tiny random-initialised snapshot (not release evidence)
 
 - **Date:** 2026-10-04
