@@ -165,7 +165,7 @@ def test_stage_processes_import_neither_ipython_nor_google_colab() -> None:
 
     carried = [ROOT / source for dest, source in TEMPLATE["carried"].items() if dest.endswith(".py")]
     assert any(path.name == "tutorial_stages.py" for path in carried)
-    offenders = [str(path) for path in carried if re.search(r"^\s*(from|import)\s+(IPython|google)b", path.read_text(encoding="utf-8"), re.M)]
+    offenders = [str(path) for path in carried if re.search(r"^\s*(from|import)\s+(IPython|google)\b",path.read_text(encoding="utf-8"), re.M)]
     assert not offenders, offenders
     nb = json.loads(NOTEBOOK.read_text(encoding="utf-8"))
     assert "sys.modules['google" not in json.dumps(nb) and 'sys.modules["google' not in json.dumps(nb)
