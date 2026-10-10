@@ -34,7 +34,7 @@ Standalone contract:
 - automatic sample artifact: N/A (no artifact is produced or consumed)
 - BYOD required by capability: yes
 - BYOD implemented: yes (hr and lr modes, upload or path)
-- Run all clean runtime: not yet run (blocked until the snapshot is pinned)
+- Run all clean runtime: yes (Colab T4, 2026-10-09, blob `a63fdd43`, fresh session)
 
 Stages:
 - validation: notebook-local; exercised on CPU with a tiny model
@@ -45,10 +45,26 @@ Stages:
 - BYOD positive/negative validation: exercised on CPU with a tiny model; not yet in a hosted runtime
 
 Execution evidence:
-- hosted runtime: none
+- hosted runtime: Google Colab T4 (2026-10-05 blob `caa2969`, not strictly fresh; 2026-10-09 blob `a63fdd43`, fresh session)
 ```
 
 ## Recorded executions
+
+### 2026-10-09 — Google Colab T4, fresh session, default `Run all` of the review-fix blob
+
+- **Date:** 2026-10-09 (23:58:57 UTC start)
+- **Subject:** `tutorials/swin2sr_x4_super_resolution_colab.ipynb`, blob `a63fdd43a9cbbce8831daac34ee86d22eac921a2` at commit `34eac6c` (branch `ccr-24656dfc-ax1ln2`; S2X-m1..m3 review fixes; `NOTEBOOK_SOURCE.revision` `c66e68e`; the commits after it change tests only). The committed blob was fetched at the 40-char SHA and Git-blob verified; every code-cell source of the executed copy equals the committed blob's.
+- **Executor:** Colab CLI 0.7.4 sequential execution (`colab exec -f`, not a browser Run all) on a fresh Colab Tesla T4 VM (session `suite-swin2sr-34eac6c-54ff`), no repository clone; kernel CPython 3.13.15.
+- **Runtime:** stage environment built by the notebook: CPython 3.12.12 managed by `uv`, the 45-package lock, `torch 2.14.0+cu130`, `transformers 4.57.6`; device `cuda:0`; `environment_reused` False (first build in this runtime), setup 84 s.
+- **Procedure:** default fields (`RUN_ACTIVITY = False`, `USE_BYOD = False`, `NEW_RUN_DIRECTORY = False`).
+- **Observed result:** **PASSED — one pass, no restart, 0 errors**; 9/9 code cells in order (`exec.log`); 154.4 s session wall.
+  - Section 3: four snapshot files verified at `c69ef3e2d2ac5777ff4a9f2f5afcd86d20604b7e` (2.8 s).
+  - Section 4: 27 photographs verified, 24 pairs, five refusal probes rejected (11.8 s).
+  - Section 5 (0.18 s per image): Y-PSNR nearest 26.7177, bicubic 28.1487, model 30.8417 dB; Y-SSIM 0.7364, 0.7879, 0.8616; RGB PSNR 25.3368, 26.7813, 29.446 dB; model minus bicubic +2.693 dB PSNR-Y (95 % bootstrap 2.0923 to 3.3513), 24/24 wins; +0.0737 SSIM-Y (0.0581 to 0.0932), 24/24 (21.2 s). Identical to the 2026-10-05 run.
+  - Section 6: four reference-free inputs upscaled with per-image padding and provenance; every listed output written (7.3 s).
+  - Sections 7 and 8: skipped (optional, off).
+- **Evidence:** `docs/execution-evidence/2026-10-09-34eac6c/`: executed notebook (SHA-256 `7ce7be7b9aa844538a82531d5ecaed1cff2003dba1864f69f8d910bce3e8e2ec`), `run_summary.json`, `exec.log`.
+- **Not exercised:** the REL12 BYOD journey and the Section 7 activity on a hosted runtime; the status stays Candidate (REL14).
 
 ### 2026-10-05 — Google Colab T4, default `Run all` with the real weights
 
