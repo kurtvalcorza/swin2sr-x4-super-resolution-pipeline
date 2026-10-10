@@ -1,0 +1,84 @@
+[colab] Parsing notebook '/home/kurt/colab-runs/swin2sr-x4-super-resolution-pipeline-34eac6c-54ffd3/swin2sr_x4_super_resolution_colab_34eac6c_colab-cli-t4.ipynb'...
+[colab] Executing cell 1/9 - Infrastructure: check the runtime, accelerator and disk; create or keep this session's run directory...
+{'gpu': 'Tesla T4, 15360 MiB', 'kernel_python': '3.13.15', 'run_directory': '/content/outputs/swin2sr_x4_super_resolution/f80f1454373f', 'weights': '/content/weights', 'environment': '/tmp/swin2sr_x4_super_resolution_env_68febdfc4307a5b3', 'free_gib': {'weights': 193.3, 'environment': 193.3}}
+[colab] Executing cell 2/9 - Infrastructure: write and verify the carried package, stage runner, lock and manifests...
+{'carried_files': 9, 'verified': True, 'repository': 'kurtvalcorza/swin2sr-x4-super-resolution-pipeline', 'revision': 'c66e68e2d0f95acd29da800cd1e9109c0c8341bf', 'generator': 'build_notebook.py/3.0'}
+[colab] Executing cell 3/9 - Infrastructure: install the locked runtime into an isolated environment and define the stage runner...
+{'notebook_source': 'c66e68e2d0f95acd29da800cd1e9109c0c8341bf', 'python': '3.12.12', 'torch': '2.14.0+cu130', 'transformers': '4.57.6', 'numpy': '2.5.3', 'PIL': '11.3.0', 'cuda': True, 'locked_packages': 45, 'environment': '/tmp/swin2sr_x4_super_resolution_env_68febdfc4307a5b3/venv', 'environment_reused': False, 'setup_seconds': 84}
+[colab] Executing cell 4/9 - Infrastructure: stage and digest-verify the pinned snapshot...
+Running stage 'weights' in the isolated environment; log: /content/outputs/swin2sr_x4_super_resolution/f80f1454373f/logs/weights.log
+{'model_id': 'caidas/swin2SR-classical-sr-x4-64', 'revision': 'c69ef3e2d2ac5777ff4a9f2f5afcd86d20604b7e', 'license': 'apache-2.0', 'files': 4, 'total_bytes': 49053290}
+{'weights_dir': '/content/weights/swin2sr-x4-64', 'fetched': ['README.md', 'config.json', 'model.safetensors', 'preprocessor_config.json']}
+{'verified_files': ['README.md', 'config.json', 'model.safetensors', 'preprocessor_config.json'], 'revision': 'c69ef3e2d2ac5777ff4a9f2f5afcd86d20604b7e'}
+{'stage': 'weights', 'status': 'ok', 'seconds': 2.8}
+[colab] Executing cell 5/9 - swin2sr_x4_super_resolution-18...
+Running stage 'prepare' in the isolated environment; log: /content/outputs/swin2sr_x4_super_resolution/f80f1454373f/logs/prepare.log
+{'photos': 27, 'bytes': 2547912, 'pinned_bytes': 2547912, 'seconds': 11.6}
+{'pairs': 24, 'per_species': {'american_goldfinch': 4, 'chipping_sparrow': 4, 'dark_eyed_junco': 4, 'house_finch': 4, 'song_sparrow': 4, 'white_throated_sparrow': 4}, 'hr_sizes': [(320, 320)], 'lr_sizes': [(80, 80)], 'digest': 'db74c01e3c872fff...'}
+{'first_input': {'id': 'song_sparrow-00', 'mode': 'RGB', 'converted_to_rgb': False, 'alpha_discarded': False, 'size': [80, 80], 'output_size': [320, 320], 'padding': {'right': 8, 'bottom': 8, 'mode': 'symmetric', 'removed_after_upscale': True}, 'tiling': 'none'}}
+{'schema': {'input': 'one PIL.Image.Image per call (any mode; converted to RGB, alpha discarded)', 'image_side_px': [8, 256], 'scale': 4, 'output': 'uint8 RGB array of shape (4H, 4W, 3)', 'preprocessing': 'rescale to [0, 1]; pad bottom/right with symmetric reflection up to the next multiple of the 8 px attention window above the input size; the padding is cropped off at output scale (4x)', 'tiling': 'none: the whole image runs in one forward pass, so the side ceiling is enforced instead'}}
+{'new_input': 'new-song_sparrow-04', 'size': [96, 96], 'output_size': [384, 384], 'padding': {'right': 8, 'bottom': 8, 'mode': 'symmetric', 'removed_after_upscale': True}}
+{'new_input': 'new-dark_eyed_junco-04', 'size': [96, 96], 'output_size': [384, 384], 'padding': {'right': 8, 'bottom': 8, 'mode': 'symmetric', 'removed_after_upscale': True}}
+{'new_input': 'new-american_goldfinch-04', 'size': [96, 96], 'output_size': [384, 384], 'padding': {'right': 8, 'bottom': 8, 'mode': 'symmetric', 'removed_after_upscale': True}}
+{'new_input': 'new-synthetic-scene', 'size': [100, 76], 'output_size': [400, 304], 'padding': {'right': 4, 'bottom': 4, 'mode': 'symmetric', 'removed_after_upscale': True}}
+{'probe': 'lr is not hr/4', 'rejected': 'records[0] (song_sparrow-00): lr (160, 160) is not hr (320, 320) downscaled by exactly 4'}
+{'probe': 'hr not divisible by 4', 'rejected': 'records[0] (song_sparrow-00): hr sides must be multiples of 4 px, got (318, 320); crop the reference first'}
+{'probe': 'pair above the size ceiling', 'rejected': 'records[0] (too-large): hr sides must be within 32..1024 px, got (1056, 64)'}
+{'probe': 'duplicate id', 'rejected': "duplicate id 'song_sparrow-00'; ids must be unique so every output maps to one input"}
+{'probe': 'lr not an image', 'rejected': 'records[0].lr (song_sparrow-00) must be a PIL.Image.Image, got str'}
+{'input_manifest': 'outputs/swin2sr_x4_super_resolution_input_manifest.json', 'inputs_csv': 'outputs/swin2sr_x4_super_resolution_inputs.csv'}
+{'stage': 'prepare', 'status': 'ok', 'seconds': 11.8}
+[colab] Executing cell 6/9 - swin2sr_x4_super_resolution-21...
+Running stage 'evaluate' in the isolated environment; log: /content/outputs/swin2sr_x4_super_resolution/f80f1454373f/logs/evaluate.log
+`self.pad_size` attribute is deprecated and will be removed in v5. Use `self.size_divisor` instead
+{'device': 'cuda:0', 'images': 24, 'model_seconds_total': 4.4, 'seconds_per_image': 0.18, 'border_px': 4}
+{'psnr_y': {'nearest': 26.7177, 'bicubic': 28.1487, 'model': 30.8417}}
+{'ssim_y': {'nearest': 0.7364, 'bicubic': 0.7879, 'model': 0.8616}}
+{'psnr_rgb': {'nearest': 25.3368, 'bicubic': 26.7813, 'model': 29.446}}
+{'model_minus_bicubic_psnr_y': {'mean_difference': 2.693, 'ci95': [2.0923, 3.3513], 'wins': 24, 'n_images': 24}}
+{'model_minus_bicubic_ssim_y': {'mean_difference': 0.0737, 'ci95': [0.0581, 0.0932], 'wins': 24, 'n_images': 24}}
+{'species': 'american_goldfinch', 'model_psnr_y': 31.7156, 'bicubic_psnr_y': 28.9286, 'n': 4}
+{'species': 'chipping_sparrow', 'model_psnr_y': 30.1955, 'bicubic_psnr_y': 27.2358, 'n': 4}
+{'species': 'dark_eyed_junco', 'model_psnr_y': 33.4706, 'bicubic_psnr_y': 29.8276, 'n': 4}
+{'species': 'house_finch', 'model_psnr_y': 32.3372, 'bicubic_psnr_y': 29.3508, 'n': 4}
+{'species': 'song_sparrow', 'model_psnr_y': 29.4546, 'bicubic_psnr_y': 27.6808, 'n': 4}
+{'species': 'white_throated_sparrow', 'model_psnr_y': 27.8765, 'bicubic_psnr_y': 25.8686, 'n': 4}
+{'panels': 'outputs/swin2sr_x4_super_resolution_panels.png', 'scores_csv': 'outputs/swin2sr_x4_super_resolution_scores.csv', 'report': 'outputs/swin2sr_x4_super_resolution_evaluation_report.json'}
+{'stage': 'evaluate', 'status': 'ok', 'seconds': 21.2}
+Input (80 px, enlarged for display) | bicubic x4 | Swin2SR x4 | reference (320 px) -> /content/outputs/swin2sr_x4_super_resolution/f80f1454373f/outputs/swin2sr_x4_super_resolution_panels.png
+<IPython.core.display.Image object>
+
+[Image saved to: /tmp/tmpoa4c3z20.png]
+[colab] Executing cell 7/9 - swin2sr_x4_super_resolution-24...
+Running stage 'infer' in the isolated environment; log: /content/outputs/swin2sr_x4_super_resolution/f80f1454373f/logs/infer.log
+`self.pad_size` attribute is deprecated and will be removed in v5. Use `self.size_divisor` instead
+{'id': 'new-song_sparrow-04', 'seconds': 0.5866, 'output_file': 'outputs/swin2sr_x4_super_resolution_new_outputs/new-song_sparrow-04_x4.png', 'input_size': (96, 96), 'output_size': (384, 384), 'padding': {'right': 8, 'bottom': 8, 'mode': 'symmetric', 'removed_after_upscale': True}}
+{'id': 'new-dark_eyed_junco-04', 'seconds': 0.207, 'output_file': 'outputs/swin2sr_x4_super_resolution_new_outputs/new-dark_eyed_junco-04_x4.png', 'input_size': (96, 96), 'output_size': (384, 384), 'padding': {'right': 8, 'bottom': 8, 'mode': 'symmetric', 'removed_after_upscale': True}}
+{'id': 'new-american_goldfinch-04', 'seconds': 0.1985, 'output_file': 'outputs/swin2sr_x4_super_resolution_new_outputs/new-american_goldfinch-04_x4.png', 'input_size': (96, 96), 'output_size': (384, 384), 'padding': {'right': 8, 'bottom': 8, 'mode': 'symmetric', 'removed_after_upscale': True}}
+{'id': 'new-synthetic-scene', 'seconds': 0.1637, 'output_file': 'outputs/swin2sr_x4_super_resolution_new_outputs/new-synthetic-scene_x4.png', 'input_size': (100, 76), 'output_size': (400, 304), 'padding': {'right': 4, 'bottom': 4, 'mode': 'symmetric', 'removed_after_upscale': True}}
+{'new_panels': 'outputs/swin2sr_x4_super_resolution_new_panels.png', 'result': 'outputs/swin2sr_x4_super_resolution_result.json'}
+outputs/:
+  - outputs/swin2sr_x4_super_resolution_evaluation_report.json (19.9 KB)
+  - outputs/swin2sr_x4_super_resolution_input_manifest.json (15.8 KB)
+  - outputs/swin2sr_x4_super_resolution_inputs.csv (2.8 KB)
+  - outputs/swin2sr_x4_super_resolution_new_outputs/new-american_goldfinch-04_x4.png (125.0 KB)
+  - outputs/swin2sr_x4_super_resolution_new_outputs/new-dark_eyed_junco-04_x4.png (114.6 KB)
+  - outputs/swin2sr_x4_super_resolution_new_outputs/new-song_sparrow-04_x4.png (181.2 KB)
+  - outputs/swin2sr_x4_super_resolution_new_outputs/new-synthetic-scene_x4.png (156.4 KB)
+  - outputs/swin2sr_x4_super_resolution_new_panels.png (918.7 KB)
+  - outputs/swin2sr_x4_super_resolution_panels.png (1215.5 KB)
+  - outputs/swin2sr_x4_super_resolution_predictions.csv (1.0 KB)
+  - outputs/swin2sr_x4_super_resolution_result.json (7.7 KB)
+  - outputs/swin2sr_x4_super_resolution_scores.csv (2.4 KB)
+  - outputs/weights.json (0.4 KB)
+  - outputs/swin2sr_x4_super_resolution_sample_outputs/ (24 PNG files)
+{'stage': 'infer', 'status': 'ok', 'seconds': 7.3}
+New inputs (no reference): input | bicubic x4 | Swin2SR x4 -> /content/outputs/swin2sr_x4_super_resolution/f80f1454373f/outputs/swin2sr_x4_super_resolution_new_panels.png
+<IPython.core.display.Image object>
+
+[Image saved to: /tmp/tmpguehfnjt.png]
+[colab] Executing cell 8/9 - swin2sr_x4_super_resolution-28...
+{'activity': 'skipped (optional)', 'to_run': 'set RUN_ACTIVITY = True, choose ACTIVITY_KERNEL or ACTIVITY_JPEG_QUALITY, then run this cell'}
+[colab] Executing cell 9/9 - swin2sr_x4_super_resolution-31...
+{'byod': 'skipped (optional)', 'to_run': "set USE_BYOD = True, BYOD_MODE = 'hr' or 'lr', and optionally BYOD_PATH, then run this cell"}
+[colab] Saving notebook with outputs to '/home/kurt/colab-runs/swin2sr-x4-super-resolution-pipeline-34eac6c-54ffd3/swin2sr_x4_super_resolution_colab_34eac6c_colab-cli-t4_output.ipynb'...

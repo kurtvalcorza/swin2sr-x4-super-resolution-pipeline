@@ -47,7 +47,9 @@ TEMPLATE = {
         "bootstrap over images, upscales three native photo crops and a seeded synthetic scene that have no reference, and writes "
         "the panels, per-image scores, predictions and a provenance record under `outputs/`. The default path needs no repository "
         "clone, no DIMER worker or service, no credential, no upload dialog, no configuration edit and no runtime restart "
-        "(NOTEBOOK_SPEC 2.2 §5). Its hosted duration has not been recorded yet."
+        "(NOTEBOOK_SPEC 2.2 §5). The recorded hosted run (Google Colab, Tesla T4, 5 October 2026, default fields, notebook generated "
+        "from revision `a112444`) built the isolated environment in 86 s and spent about 43 s in the model stages; a second **Run all** "
+        "in the same runtime reuses that environment."
     ),
     "byod": (
         "After the default path completes, Section 8 lets you run the same validation, inference and output contract on your own "
@@ -85,8 +87,8 @@ TEMPLATE = {
     "badges": BADGES,
     "capability": "4x single-image super-resolution with a 12.2 M-parameter Swin2SR transformer (classical, bicubic degradation), scored with Y-channel PSNR and SSIM against bicubic and nearest-neighbour interpolation, plus reference-free inference on new images",
     "intro": (
-        "Swin2SR (Conde et al., 2023) is a SwinV2 transformer (Liu et al., 2022) for image restoration. This checkpoint, "
-        "`{MODEL_ID}`, is the *classical* 4x super-resolution variant: it was trained to undo one known degradation — a sharp "
+        "Swin2SR (Conde et al., 2023) is a SwinV2 transformer (Liu et al., 2022) for image restoration. The checkpoint this "
+        "notebook pins (named in Section 3) is the *classical* 4x super-resolution variant: it was trained to undo one known degradation — a sharp "
         "photograph shrunk 4x with bicubic interpolation — so it receives an `H × W` RGB image and returns a `4H × 4W` image in a "
         "single forward pass. Every input pixel is a token (`patch_size` 1), self-attention runs inside 8 × 8 windows over six "
         "residual groups, and a pixel-shuffle head rearranges channels into the 16 × larger output.\n\n"
@@ -113,7 +115,8 @@ TEMPLATE = {
         "looks to a person. The repository exposes none of these."
     ),
     "prerequisites": [
-        "- **Runtime:** a fresh supported **Linux x86_64** runtime (Google Colab, Kaggle, or a Linux Jupyter kernel). A CUDA GPU such as a T4 is used automatically when present; without one every stage runs on the CPU in float32. The kernel's own Python version does not matter: the notebook installs nothing into it and runs every stage with CPython 3.12.12 in an isolated environment built from {n_locked} hash-locked packages (torch 2.14.0, whose Linux wheel is the CUDA 13.0 build and also runs on a CPU). About 7 GB of free disk is needed for that environment (it occupied 5.5 GB in a local CPU run) and 0.1 GB for the weights and photographs.",
+        "- **Runtime:** a fresh supported **Linux x86_64** runtime (Google Colab, Kaggle, or a Linux Jupyter kernel). A CUDA GPU such as a T4 is used automatically when present; without one every stage runs on the CPU in float32. The kernel's own Python version does not matter: the notebook installs nothing into it and runs every stage with CPython 3.12.12 in an isolated environment built from {n_locked} hash-locked packages (torch 2.14.0, whose Linux wheel is the CUDA 13.0 build and also runs on a CPU). The Section 1 check asks for about 7 GB of free disk for that environment (it occupied 5.5 GB in a local CPU run; the rest is a margin) and 0.1 GB for the weights and photographs.",
+        "- **Time on the documented runtime:** in the recorded hosted run (Google Colab, Tesla T4, 5 October 2026, default fields, notebook generated from revision `a112444`; see `docs/release-verification.md`) the environment was built in 86 s and the stages took: weights 2.1 s, prepare 13.7 s, evaluate 20.5 s (0.23 s per image on CUDA), infer 6.9 s.",
         "- **Time on a CPU:** measured for this architecture on a 4-vCPU host in float32, one forward pass took 3.2 s for an 80 px input, 4.6 s for 128 px and 28.7 s for 256 px (the largest accepted input). The 24 sample inputs are 80 px, so Section 5 is estimated (not measured) at one to two minutes on such a host, and longer on a 2-vCPU hosted runtime. These are measurements of the model's compute with random weights on that host, not of a hosted run of this notebook.",
         "- **Knowledge:** you can run notebook cells and read short Python. No prior experience with super-resolution is assumed; the glossary below defines PSNR, SSIM, the Y channel and the other terms.",
         "- **Weights:** only `model.safetensors` is loaded; the upstream repository's `pytorch_model.bin` (a pickle file) is never downloaded or unpickled, and no Hub-hosted code is executed — the model classes come from `transformers` on PyPI with `trust_remote_code=False`. The weights are released under Apache-2.0.",
@@ -132,8 +135,10 @@ TEMPLATE = {
                 "below collects them. A GPU is recommended but not required; the **Prerequisites** give the details.\n\n"
                 "**Running it.** In Colab, optionally choose *Runtime → Change runtime type → T4 GPU*, then *Runtime → Run all*. The "
                 "default path needs no edit, no upload, no account, no token and no runtime restart. Sections 1–3 build an isolated "
-                "environment from hash-locked packages before any model runs, so they take the longest; read ahead while they finish, "
-                "or run the notebook one cell at a time with *Shift + Enter*.\n\n"
+                "environment from hash-locked packages before any model runs (about 90 s in the recorded T4 run; a later Run all in the "
+                "same runtime reuses the environment); read ahead while they finish, or run the notebook one cell at a time with "
+                "*Shift + Enter*. Re-running the Section 1 cell on its own is safe: it keeps this session's run directory, so the cells "
+                "after it keep working.\n\n"
                 "**Where the code runs.** The notebook kernel installs nothing and imports no model library. Each learner cell calls "
                 "`run_stage('…')`, which runs one stage of the carried stage runner in its own process with the isolated environment's "
                 "Python, streams what it prints, and stops the notebook with the stage's own error message if it fails. Stages hand "
@@ -145,7 +150,8 @@ TEMPLATE = {
                 "knowledge. Open one with *Show code* if you are curious.\n\n"
                 "**Form controls.** Two optional cells start with fields that Colab renders as a form: `RUN_ACTIVITY`, `ACTIVITY_KERNEL` "
                 "and `ACTIVITY_JPEG_QUALITY` (Section 7), and `USE_BYOD`, `BYOD_MODE` and `BYOD_PATH` (Section 8). Leave them at their "
-                "defaults for the first run: both branches are off, and the notes and sample answers describe the default path.\n\n"
+                "defaults for the first run: both branches are off, and the notes and sample answers describe the default path. The Section 1 "
+                "infrastructure cell has one more, `NEW_RUN_DIRECTORY`, off by default.\n\n"
                 "**Section tags.** Each numbered heading carries one tag. **[Concept]** — what the model does and why. **[Evaluation "
                 "practice]** — how the evidence is produced and how to read it. **[Engineering]** — reproducibility, provenance and "
                 "packaging.\n\n"
@@ -353,11 +359,13 @@ TEMPLATE = {
             "md": (
                 "**What to notice:** the `psnr_y`, `ssim_y` and `psnr_rgb` rows each list nearest, bicubic and model means; the "
                 "`model_minus_bicubic` rows give the mean per-image difference, its 95 % bootstrap interval, and how many of the 24 "
-                "images the model won; one line per species follows. In the panels, compare feather edges and the background: bicubic "
+                "images the model won; one line per species follows — **four crops per species, descriptive only**: four images cannot rank "
+                "species, so do not read a difference between species lines as a property of the birds. In the panels, compare feather edges and the background: bicubic "
                 "is smooth and soft, the model's output has crisper edges. The per-image numbers are in `outputs/{stem}_scores.csv`, "
                 "every output image in `outputs/{stem}_sample_outputs/`, and the full record in `outputs/{stem}_evaluation_report.json`.\n\n"
-                "**Checkpoint:** suppose the model wins by about 1 dB on average and the bootstrap interval excludes zero. What does "
-                "that interval tell you, and what does it *not* tell you?\n\n"
+                "**Checkpoint:** suppose, as in the recorded T4 run, the model wins by a few dB on average (there +2.69 dB PSNR-Y, 95 % "
+                "bootstrap interval 2.09 to 3.35) and on every one of the 24 images. What does that interval tell you, and what does "
+                "it *not* tell you?\n\n"
                 "<details>\n<summary>Check your reasoning (open after answering)</summary>\n\n"
                 "The interval says that, among images like these 24, the average advantage is unlikely to be zero: resampling the "
                 "per-image differences rarely produces a mean near zero. It does not say the model wins on every image (read `wins`), "
@@ -366,7 +374,8 @@ TEMPLATE = {
                 "right and penalises plausible texture placed slightly wrong, so a sharper-looking image can score lower. Two further "
                 "limits: the comparison is one deterministic pass, so the interval reflects image-to-image variation only; and because "
                 "the photos are public, overlap with the model's training data cannot be ruled out, although the upstream training "
-                "sets are general photo collections rather than iNaturalist. If your run shows a gap far from 1 dB, trust your run.\n\n"
+                "sets are general photo collections rather than iNaturalist. A win on every image here is a statement about these 24 bicubic "
+                "crops, not a guarantee on yours. If your run shows a different gap, trust your run.\n\n"
                 "</details>"
             ),
         },
@@ -549,8 +558,9 @@ TEMPLATE = {
                 "Use Google Colab, Kaggle, or a Linux x86_64 machine: the locked environment is built for manylinux x86_64 wheels. |\n"
                 "| Section 1 prints `none: the stages will run on the CPU` | no GPU is attached | Nothing to fix: the notebook works on the "
                 "CPU. For speed, choose *Runtime → Change runtime type → T4 GPU* and run all again from the top. |\n"
-                "| Section 1 stops with `Not enough free disk` | the isolated environment needs about 7 GB | Start a fresh runtime with more "
-                "free disk. |\n"
+                "| Section 1 stops with `Not enough free disk` | the check asks for about 7 GB for the isolated environment (5.5 GB measured, plus a margin) | Start a fresh runtime with more "
+                "free disk; an environment built from the same lock earlier in this runtime is reused and needs no more. |\n"
+                "| `The run directory … has no carried files, or the isolated environment is gone: run the three Infrastructure cells again in order (Sections 1, 2 and 3)` | Section 1 was run with `NEW_RUN_DIRECTORY` ticked (a fresh, empty run directory), or the runtime's temporary directory was cleared | Run Sections 1, 2 and 3 again in order, then the cell you wanted, or choose *Runtime → Run all*. Re-running the Section 1 cell on its own with the default setting keeps the run directory and needs nothing else. |\n"
                 "| `Carried file integrity failure` in Section 2 | a carried file was edited in the notebook | Do not edit the "
                 "infrastructure cells; open a fresh copy of the notebook from the repository. |\n"
                 "| `uv 0.12.15 wheel size/hash mismatch`, or a `URLError` / timeout while downloading it | a network failure or an "
